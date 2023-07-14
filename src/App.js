@@ -1,134 +1,127 @@
-import React, { useState, useEffect  } from 'react';
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Link,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import SignInForm from './SignInComponent';
-import SignUpForm from './SignUpComponent';
-import { API_BASE_URL } from './apiConfig';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginTop: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  title: {
-    marginBottom: theme.spacing(2),
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
-  },
-  submitButton: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-const BlogPage = () => {
-  return (
-    <Container component="main" maxWidth="xs">
-      <div>
-        <Typography variant="h5" align="center">
-          Welcome to the Blog Page
-        </Typography>
-        {/* Add blog content here */}
-      </div>
-    </Container>
-  );
-};
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
+import Main from "./Main";
+import { Container, AppBar, Toolbar, Typography, Button } from "@material-ui/core";
+import {API_BASE_URL} from "./apiConfig";
 
 const App = () => {
-  const [isSignInPage, setIsSignInPage] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [authToken, setAuthToken] = useState(localStorage.getItem("authToken") || "");
 
   useEffect(() => {
-    const authenticateUser = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/users/profile`, {
-          credentials: 'include',
+    if (authToken) {
+      fetch(`${API_BASE_URL}/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            setLoggedIn(true);
+          } else {
+            setLoggedIn(false);
+            localStorage.removeItem("authToken");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          setLoggedIn(false);
+          localStorage.removeItem("authToken");
         });
-        if (response.ok) {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('Error authenticating user:', error);
-        setIsLoggedIn(false);
-      }
-    };
-
-    if (isSignInPage && !isLoggedIn) {
-      authenticateUser();
+    } else {
+      setLoggedIn(false);
     }
-  }, [isSignInPage, isLoggedIn]);
+  }, [authToken]);
 
-  // sign up
-  const handleSignUpClick = () => {
-    setIsSignInPage(false);
-  };
-
-  // sign in
-  const handleSignInClick = () => {
-    setIsSignInPage(true);
-  };
-
-  const handleSignIn = (signInData) => {
-    // Call sign in API endpoint
-    fetch(`${API_BASE_URL}/users/sign-in`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(signInData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle successful sign in
-        setIsLoggedIn(true);
-      })
-      .catch((error) => {
-        // Handle sign in error
-        console.error('Error signing in:', error);
-      });
-  };
-
-  const handleSignUp = (signUpData) => {
-    // Call sign up API endpoint
+  const handleSignUp = (username, password) => {
     fetch(`${API_BASE_URL}/users/sign-up`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(signUpData),
+      body: JSON.stringify({ username, password }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle successful sign up
-        setIsSignInPage(true);
+      .then((response) => {
+        if (response.ok) {
+          console.log("Signed up");
+        } else {
+          console.error("Error:", response.status);
+        }
       })
       .catch((error) => {
-        // Handle sign up error
-        console.error('Error signing up:', error);
+        console.error("Error:", error);
       });
+  };
+
+  const handleSignIn = (username, password) => {
+    fetch(`${API_BASE_URL}/users/sign-in`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          response.headers.forEach(console.log)
+          setLoggedIn(true);
+          setAuthToken(response.headers.get("x-auth-token"));
+          localStorage.setItem("authToken", response.headers.get("x-auth-token"));
+        } else {
+          console.error("Error:", response.status);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const handleSignOut = () => {
+    setLoggedIn(false);
+    setAuthToken("");
+    localStorage.removeItem("authToken");
+  };
+
+  const PrivateRoute = ({ element: Element, ...rest }) => {
+    return loggedIn ? (
+      <Route {...rest} element={<Element />} />
+    ) : (
+      <Navigate to="/sign-in" replace />
+    );
   };
 
   return (
-    <div>
-      {
-        isLoggedIn
-          ? (<BlogPage />)
-          : (isSignInPage 
-            ? (<SignInForm handleSignUpClick={handleSignUpClick} handleSignIn={handleSignIn} />) 
-            : (<SignUpForm handleSignInClick={handleSignInClick} handleSignUp={handleSignUp} />))
-      }
-    </div>
+    <Router>
+      <Container maxWidth="xl">
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" style={{ flexGrow: 1 }}>
+              My App
+            </Typography>
+            <Typography variant="body1" style={{ marginRight: "10px" }}>
+              Welcome, {loggedIn ? "Username" : ""}
+            </Typography>
+            <Button color="inherit" onClick={handleSignOut}>
+              Sign Out
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <Container maxWidth="md" style={{ marginTop: "20px" }}>
+          <Routes>
+            <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} />} />
+            <Route path="/sign-in" element={<SignIn handleSignIn={handleSignIn} />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute element={<Main />} />
+              }
+            />
+          </Routes>
+        </Container>
+      </Container>
+    </Router>
   );
 };
 
