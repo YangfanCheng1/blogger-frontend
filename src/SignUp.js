@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
 
-const SignUp = ({ handleSignUp }) => {
+const SignUp = ({ handleSignUp, navigate}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,7 +11,7 @@ const SignUp = ({ handleSignUp }) => {
     e.preventDefault();
     setError("");
 
-    handleSignUp(username, password);
+    handleSignUp(username, password, navigate);
   };
 
   return (
