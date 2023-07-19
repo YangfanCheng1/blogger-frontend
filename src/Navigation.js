@@ -38,6 +38,7 @@ const Navigation = () => {
         .catch((error) => {
           console.error("Error:", error);
           setLoggedIn(false);
+          setLoading(false);
           localStorage.removeItem("authToken");
         });
     } else {
@@ -123,13 +124,13 @@ const Navigation = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md" style={{ marginTop: "20px" }}>
+      <div>
         <Routes>
           <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} navigate={navigate}/>} />
           <Route path="/sign-in" element={<SignIn handleSignIn={handleSignIn} navigate={navigate}/>} />
           <Route path="/" element={<PrivateRoute element={<Main />} />} />
         </Routes>
-      </Container>
+      </div>
     </Container>
   );
 };
