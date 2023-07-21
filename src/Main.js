@@ -30,7 +30,7 @@ const Main = ({ handleSignOut, loggedIn }) => {
         description
       };
 
-      await axios.post("/posts", payload);
+      await axios.post("http://localhost:8080/posts", payload);
       fetchThreads();
       setTitle("");
       setDescription("");

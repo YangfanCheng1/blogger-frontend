@@ -110,7 +110,7 @@ const Navigation = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container disableGutters maxWidth="false">
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
