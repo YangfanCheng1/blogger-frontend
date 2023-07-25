@@ -5,6 +5,7 @@ import SignIn from "./SignIn";
 import Main from "./Main";
 import { Container, AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { API_BASE_URL } from "./apiConfig";
+import NavBar from "./NavBar";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -111,19 +112,7 @@ const Navigation = () => {
 
   return (
     <Container disableGutters maxWidth={false}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            My App
-          </Typography>
-          <Typography variant="body1" style={{ marginRight: "10px" }}>
-            Welcome, {loggedIn ? "Username" : ""}
-          </Typography>
-          <Button color="inherit" onClick={handleSignOut}>
-            Sign Out
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <NavBar loggedIn={loggedIn} handleSignOut={handleSignOut} />
       <div>
         <Routes>
           <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} navigate={navigate}/>} />
