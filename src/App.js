@@ -10,7 +10,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div style={appStyles}>
       <Router>
         <Navigation />
       </Router>
