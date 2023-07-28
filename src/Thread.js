@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 
-const Main = ({ handleSignOut, loggedIn }) => {
+const Thread = ({ handleSignOut, loggedIn }) => {
   const [threads, setThreads] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -106,4 +106,4 @@ const Main = ({ handleSignOut, loggedIn }) => {
   );
 };
 
-export default Main;
+export default Thread;

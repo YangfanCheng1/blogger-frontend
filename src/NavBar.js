@@ -3,29 +3,6 @@ import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const NavBar = ({ loggedIn, handleSignOut }) => {
-  const appBarStyles = {
-    backgroundColor: "#1A237E", // Background color
-    color: "white", // Text color
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "10px",
-    boxShadow: "none", // Remove the box shadow
-  };
-
-  const logoStyles = {
-    color: "white",
-    textDecoration: "none",
-    fontWeight: "bold",
-    fontSize: "24px",
-  };
-
-  const welcomeStyles = {
-    marginRight: "10px",
-    fontWeight: "bold",
-    fontSize: "18px",
-  };
-
   return (
       <AppBar position="static">
         <Toolbar>

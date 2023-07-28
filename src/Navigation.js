@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
-import Main from "./Main";
+import Thread from "./Thread";
 import { Container, AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { API_BASE_URL } from "./apiConfig";
 import NavBar from "./NavBar";
@@ -100,7 +100,7 @@ const Navigation = () => {
 
   const PrivateRoute = ({ element: Element, ...rest }) => {
     return loggedIn ? (
-      <Main />
+      <Thread />
     ) : (
       <Navigate to="/sign-in" replace />
     );
@@ -117,7 +117,7 @@ const Navigation = () => {
         <Routes>
           <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} navigate={navigate}/>} />
           <Route path="/sign-in" element={<SignIn handleSignIn={handleSignIn} navigate={navigate}/>} />
-          <Route path="/" element={<PrivateRoute element={<Main />} />} />
+          <Route path="/" element={<PrivateRoute element={<Thread />} />} />
         </Routes>
       </div>
     </Container>
