@@ -6,6 +6,7 @@ import Thread from "./Thread";
 import { Container, AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { API_BASE_URL } from "./apiConfig";
 import NavBar from "./NavBar";
+import Transformer from "./Transformer";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ const Navigation = () => {
 
   const PrivateRoute = ({ element: Element, ...rest }) => {
     return loggedIn ? (
-      <Thread />
+      <Transformer />
     ) : (
       <Navigate to="/sign-in" replace />
     );
@@ -117,7 +118,7 @@ const Navigation = () => {
         <Routes>
           <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} navigate={navigate}/>} />
           <Route path="/sign-in" element={<SignIn handleSignIn={handleSignIn} navigate={navigate}/>} />
-          <Route path="/" element={<PrivateRoute element={<Thread />} />} />
+          <Route path="/" element={<PrivateRoute element={<Transformer />} />} />
         </Routes>
       </div>
     </Container>
