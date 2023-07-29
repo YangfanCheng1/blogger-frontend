@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, TextField, RadioGroup, Radio, FormControlLabel, Button, Container } from '@material-ui/core';
 import axios from 'axios';
+import useMarginTop from './UseMarginTop';
 
 const Transformer = () => {
+  const classes = useMarginTop(); // Use the custom hook to get the styles
   const [selectedOption, setSelectedOption] = useState('funny');
   const [textBlock, setTextBlock] = useState('');
 
@@ -29,7 +31,7 @@ const Transformer = () => {
   };
 
   return (
-    <Container>
+    <Container className={classes.container}>
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h5" component="h2">
