@@ -119,6 +119,8 @@ const Navigation = () => {
           <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} navigate={navigate}/>} />
           <Route path="/sign-in" element={<SignIn handleSignIn={handleSignIn} navigate={navigate}/>} />
           <Route path="/" element={<PrivateRoute element={<Transformer />} />} />
+          <Route path="/thread" element={<Thread handleSignOut={handleSignOut} loggedIn={loggedIn} />} />
+
         </Routes>
       </div>
     </Container>
