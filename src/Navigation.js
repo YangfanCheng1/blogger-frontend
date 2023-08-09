@@ -101,7 +101,7 @@ const Navigation = () => {
 
   const PrivateRoute = ({ element: Element, ...rest }) => {
     return loggedIn ? (
-      <Transformer />
+      <Thread />
     ) : (
       <Navigate to="/sign-in" replace />
     );
@@ -118,7 +118,7 @@ const Navigation = () => {
         <Routes>
           <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} navigate={navigate}/>} />
           <Route path="/sign-in" element={<SignIn handleSignIn={handleSignIn} navigate={navigate}/>} />
-          <Route path="/" element={<PrivateRoute element={<Transformer />} />} />
+          <Route path="/" element={<PrivateRoute element={<Thread />} />} />
           <Route path="/thread" element={<Thread handleSignOut={handleSignOut} loggedIn={loggedIn} />} />
 
         </Routes>
